@@ -34,7 +34,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <Header title={"My App"} />
+        <Header title={"フードショップ"} />
         {children}
         <ScrollRestoration />
         <Scripts />
