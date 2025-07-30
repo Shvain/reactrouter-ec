@@ -1,5 +1,11 @@
+import { useCart } from "~/contexts/CartItemContext";
 
 export default function PaymentPage() {
+  const { state } = useCart();
+
+  const tax = Math.floor(state.totalPrice * 0.1);
+  const totalWithTax = state.totalPrice + tax; 
+
   return (
   <section className="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
     <div className="mx-auto max-w-screen-xl px-4 2xl:px-0">
@@ -57,18 +63,18 @@ export default function PaymentPage() {
               <div className="space-y-2">
                 <dl className="flex items-center justify-between gap-4">
                   <dt className="text-base font-normal text-gray-500 dark:text-gray-400">小計</dt>
-                  <dd className="text-base font-medium text-gray-900 dark:text-white">￥6,592</dd>
+                  <dd className="text-base font-medium text-gray-900 dark:text-white">¥{state.totalPrice.toLocaleString()}</dd>
                 </dl>
 
                 <dl className="flex items-center justify-between gap-4">
                   <dt className="text-base font-normal text-gray-500 dark:text-gray-400">消費税</dt>
-                  <dd className="text-base font-medium text-gray-900 dark:text-white">￥799</dd>
+                  <dd className="text-base font-medium text-gray-900 dark:text-white">¥{tax.toLocaleString()}</dd>
                 </dl>
               </div>
 
               <dl className="flex items-center justify-between gap-4 border-t border-gray-200 pt-2 dark:border-gray-700">
                 <dt className="text-base font-bold text-gray-900 dark:text-white">合計</dt>
-                <dd className="text-base font-bold text-gray-900 dark:text-white">￥7,191</dd>
+                <dd className="text-base font-bold text-gray-900 dark:text-white">¥{totalWithTax.toLocaleString()}</dd>
               </dl>
             </div>
 
