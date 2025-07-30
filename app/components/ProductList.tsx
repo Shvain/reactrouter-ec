@@ -5,6 +5,7 @@ import { Link } from 'react-router';
 import type { 
   Item, 
 } from '@models/item';
+import { useCart } from '~/contexts/CartItemContext';
 
 interface ProductListProps {
   products: Item[];
@@ -12,6 +13,7 @@ interface ProductListProps {
 
 const ProductList = ({ products }: ProductListProps) => {
   const [activeCategory, setActiveCategory] = useState<string>('全て');
+  const { addToCart } = useCart();
 
   const filteredProducts = activeCategory === '全て' 
     ? products 
@@ -99,12 +101,12 @@ const ProductList = ({ products }: ProductListProps) => {
                   <span className="text-3xl font-bold text-gray-900 dark:text-white">
                     {product.price}
                   </span>
-                  <Link
-                    to={`/${product.id}`}
+                  <button
+                    onClick={() => addToCart(product)}
                     className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 transition-colors duration-200"
                   >
                     カートに入れる
-                  </Link>
+                  </button>
                 </div>
               </div>
             </div>

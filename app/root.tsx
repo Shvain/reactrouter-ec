@@ -7,6 +7,7 @@ import {
   ScrollRestoration,
 } from "react-router";
 import Header from '@components/Header';
+import { CartProvider } from '@contexts/CartItemContext';
 
 import type { Route } from "./+types/root";
 import "./app.css";
@@ -34,8 +35,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <Header title={"フードショップ"} />
-        {children}
+        <CartProvider>
+          <Header title={"フードショップ"} />
+          {children}
+        </CartProvider>
         <ScrollRestoration />
         <Scripts />
       </body>

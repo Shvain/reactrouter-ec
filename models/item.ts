@@ -6,6 +6,7 @@ interface Item {
   rating: number;
   link: string;
   category?: string;
+  quantity: number;
   description?: string;
 }
 
@@ -18,7 +19,8 @@ const MockData: Item[] = [
     rating: 2.8,
     link: "/sandwich",
     category: "フード",
-    description: "新鮮な野菜とお肉を挟んだボリューム満点のサンドウィッチ。"
+    description: "新鮮な野菜とお肉を挟んだボリューム満点のサンドウィッチ。",
+    quantity: 1,
   },
   {
     id: "tropical-juice",
@@ -28,7 +30,8 @@ const MockData: Item[] = [
     rating: 3.6,
     link: "/tropical-juice",
     category: "ドリンク",
-    description: "さっぱりとした甘さが特徴のトロピカルジュース。"
+    description: "さっぱりとした甘さが特徴のトロピカルジュース。",
+    quantity: 1,
   },
   {
     id: "ice-cream",
@@ -38,7 +41,8 @@ const MockData: Item[] = [
     rating: 4.7,
     link: "/ice-cream",
     category: "サイド",
-    description: "つめたく冷たいアイスクリーム。暑い日にぴったりのデザートです。"
+    description: "つめたく冷たいアイスクリーム。暑い日にぴったりのデザートです。",
+    quantity: 1,
   },
   {
     id: "popcorn",
@@ -48,7 +52,8 @@ const MockData: Item[] = [
     rating: 4.5,
     link: "/popcorn",
     category: "サイド",
-    description: "映画のお供に最適なポップコーン。軽やかな食感とバターの風味が楽しめます。"
+    description: "映画のお供に最適なポップコーン。軽やかな食感とバターの風味が楽しめます。",
+    quantity: 1,
   },
   {
     id: "hamburger",
@@ -58,7 +63,8 @@ const MockData: Item[] = [
     rating: 3.3,
     link: "/hamburger",
     category: "フード",
-    description: "ジューシーなパティと新鮮な野菜を挟んだハンバーガー。"
+    description: "ジューシーなパティと新鮮な野菜を挟んだハンバーガー。",
+    quantity: 1,
   },
   {
     id: "donut",
@@ -68,7 +74,8 @@ const MockData: Item[] = [
     rating: 2.4,
     link: "/donut",
     category: "サイド",
-    description: "ふんわりとした生地に甘いクリームがたっぷり詰まったドーナツ。"
+    description: "ふんわりとした生地に甘いクリームがたっぷり詰まったドーナツ。",
+    quantity: 1,
   },
     {
     id: "beer",
@@ -78,7 +85,8 @@ const MockData: Item[] = [
     rating: 5,
     link: "/beer",
     category: "ドリンク",
-    description: "爽やかな喉越しと豊かな香りが楽しめるビール。"
+    description: "爽やかな喉越しと豊かな香りが楽しめるビール。",
+    quantity: 1,
   },
 ];
 

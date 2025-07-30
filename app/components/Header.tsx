@@ -3,6 +3,7 @@ import {
   useState,
 } from 'react';
 import { Link } from 'react-router';
+import { useCart } from '~/contexts/CartItemContext';
 
 interface Props {
   title?: string;
@@ -13,6 +14,7 @@ export default function Header({
 }: Props) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const { state, removeFromCart, updateQuantity } = useCart();
 
   useEffect(() => {
     const checkScrolling = () => {
@@ -69,9 +71,14 @@ export default function Header({
               </Link>
               <button
                 onClick={openDrawer}
-                className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                className="relative text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
               >
                 カート
+                {state.totalItems > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {state.totalItems}
+                  </span>
+                )}
               </button>
             </div>
           </div>
@@ -133,31 +140,54 @@ export default function Header({
         </button>
         
         <div className="mb-6">
-          {/* カート内容の例 */}
-          <div className="space-y-4">
-            <div className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg dark:border-gray-600">
-              <img 
-                src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Food/Sandwich.png" 
-                alt="商品" 
-                className="w-12 h-12 object-contain"
-              />
-              <div className="flex-1">
-                <h6 className="text-sm font-medium text-gray-900 dark:text-white">サンドウィッチ</h6>
-                <p className="text-xs text-gray-500">¥500</p>
-              </div>
-              <div className="flex items-center space-x-2">
-                <button className="w-6 h-6 text-gray-400 hover:text-gray-600">-</button>
-                <span className="text-sm">1</span>
-                <button className="w-6 h-6 text-gray-400 hover:text-gray-600">+</button>
-              </div>
+          {state.items.length === 0 ? (
+            <div className="text-center text-gray-500 py-8">
+              カートは空です
             </div>
-          </div>
+          ) : (
+            <div className="space-y-4">
+              {state.items.map((item) => (
+                <div key={item.id} className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg dark:border-gray-600">
+                  <img 
+                    src={item.image} 
+                    alt={item.title} 
+                    className="w-12 h-12 object-contain"
+                  />
+                  <div className="flex-1">
+                    <h6 className="text-sm font-medium text-gray-900 dark:text-white">{item.title}</h6>
+                    <p className="text-xs text-gray-500">{item.price}</p>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <button 
+                      className="w-6 h-6 text-gray-400 hover:text-gray-600 flex items-center justify-center"
+                      onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                    >
+                      -
+                    </button>
+                    <span className="text-sm">{item.quantity}</span>
+                    <button 
+                      className="w-6 h-6 text-gray-400 hover:text-gray-600 flex items-center justify-center"
+                      onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                    >
+                      +
+                    </button>
+                    <button 
+                      className="ml-2 text-red-500 hover:text-red-700 text-xs"
+                      onClick={() => removeFromCart(item.id)}
+                    >
+                      削除
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
         
         <div className="border-t pt-4 dark:border-gray-600">
           <div className="flex justify-between items-center mb-4">
             <span className="text-sm font-medium text-gray-900 dark:text-white">合計:</span>
-            <span className="text-lg font-bold text-gray-900 dark:text-white">¥500</span>
+            <span className="text-lg font-bold text-gray-900 dark:text-white">¥{state.totalPrice.toLocaleString()}</span>
           </div>
           
           <div className="grid grid-cols-2 gap-4">
@@ -167,26 +197,30 @@ export default function Header({
             >
               買い物を続ける
             </button>
-            <a href='/payment'>
-              <button className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-                レジに進む
-                <svg 
-                  className="rtl:rotate-180 w-3.5 h-3.5 ms-2" 
-                  aria-hidden="true" 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  fill="none" 
-                  viewBox="0 0 14 10"
-                >
-                  <path 
-                    stroke="currentColor" 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    strokeWidth="2" 
-                    d="M1 5h12m0 0L9 1m4 4L9 9"
-                  />
-                </svg>
-              </button>
-            </a>
+            <Link
+              to='/payment'
+              onClick={closeDrawer}
+              className={`inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 ${
+                state.items.length === 0 ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
+            >
+              レジに進む
+              <svg 
+                className="rtl:rotate-180 w-3.5 h-3.5 ms-2" 
+                aria-hidden="true" 
+                xmlns="http://www.w3.org/2000/svg" 
+                fill="none" 
+                viewBox="0 0 14 10"
+              >
+                <path 
+                  stroke="currentColor" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth="2" 
+                  d="M1 5h12m0 0L9 1m4 4L9 9"
+                />
+              </svg>
+            </Link>
           </div>
         </div>
       </div>

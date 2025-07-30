@@ -1,9 +1,11 @@
 import { MockData, type Item } from '@models/item';
 import { useParams, Link } from 'react-router';
 import type { Route } from "./+types/$items";
+import { useCart } from '~/contexts/CartItemContext';
 
 export default function ItemsPage() {
   const { items } = useParams<{ items: string }>();
+  const { addToCart } = useCart();
   
   // URLパラメータから商品を検索
   const product = MockData.find(item => item.id === items);
@@ -67,7 +69,10 @@ export default function ItemsPage() {
                     {product.description || "高品質な商品をお手頃価格でご提供します。"}
                   </p>
                 </div>
-                <button className="flex-1 bg-blue-700 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-800 transition-colors duration-200">
+                <button
+                  onClick={() => addToCart(product)}
+                  className="flex-1 bg-blue-700 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-800 transition-colors duration-200"
+                >
                   カートに入れる
                 </button>
                 <div className="border-t pt-6 mt-8">
